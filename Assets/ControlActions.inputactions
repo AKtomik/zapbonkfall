@@ -1,0 +1,57 @@
+{
+    "version": 1,
+    "name": "ControlActions",
+    "maps": [
+        {
+            "name": "Gameplay",
+            "id": "37c5334b-ab69-49bb-b33b-7064fdbc2294",
+            "actions": [
+                {
+                    "name": "Tap",
+                    "type": "Button",
+                    "id": "8c823782-e16b-4fe1-bb05-468a369f5b6a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Point",
+                    "type": "Button",
+                    "id": "82553281-6c07-42b1-82e5-96cf3f124c4e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1c25c6e3-ba71-4a07-bfe5-679454e3834b",
+                    "path": "<Pointer>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "255cc415-d46e-4014-bd60-10833600450d",
+                    "path": "<Pointer>/Position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

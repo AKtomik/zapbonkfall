@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 909830355}
   - component: {fileID: 909830354}
   m_Layer: 0
-  m_Name: TouchInputTest
+  m_Name: TapInputTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -576,6 +576,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TouchInputTest
   particle: {fileID: 682024953795494653, guid: bbac22fcc9235a84fb4b6e1babe9ac6f, type: 3}
   shiftParticulePoisition: {x: 0, y: 2, z: 0}
+  tapAction: {fileID: 6347983061802862827, guid: 9235763f52c89c9449331d610e640c72, type: 3}
+  pointAction: {fileID: -7535639397868587716, guid: 9235763f52c89c9449331d610e640c72, type: 3}
 --- !u!4 &909830355
 Transform:
   m_ObjectHideFlags: 0
