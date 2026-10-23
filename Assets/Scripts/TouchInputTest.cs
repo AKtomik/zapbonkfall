@@ -1,23 +1,37 @@
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class TouchInputTest : MonoBehaviour
 {
     [SerializeField] GameObject particle;
-    [SerializeField] Vector3 deltaFallPoisition;
+    [SerializeField] Vector3 shiftParticulePoisition;
 
-    void Update()
+	void OnEnable()
+	{
+        Debug.Log("Enable TouchInputTest");
+		EnhancedTouchSupport.Enable();
+	}
+
+	void OnDisable()
+	{
+        Debug.Log("Disable TouchInputTest");
+		EnhancedTouchSupport.Disable();
+	}
+
+	void Update()
     {
-        foreach(Touch touch in Input.touches)
+        foreach(Touch touch in Touch.activeTouches)
         {
-            if (touch.phase == UnityEngine.TouchPhase.Began)
+            if (touch.phase == TouchPhase.Began)
             {
-                // Construct a ray from the current touch coordinates
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                Debug.Log("Tap at : " + touch.screenPosition);
+
+                Ray ray = Camera.main.ScreenPointToRay(touch.screenPosition);
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    // Create a particle if hit
-                    Instantiate(particle, hit.point + deltaFallPoisition, transform.rotation);
+                    Instantiate(particle, hit.point + shiftParticulePoisition, transform.rotation);
                 }
             }
         }
