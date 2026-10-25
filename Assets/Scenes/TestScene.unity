@@ -511,6 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   attitudeAction: {fileID: -1771282363913012692, guid: 9235763f52c89c9449331d610e640c72, type: 3}
   sensitivity: 1
+  intialRotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

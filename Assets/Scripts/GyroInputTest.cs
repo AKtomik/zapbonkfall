@@ -1,18 +1,21 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
 public class GyroInputTest : MonoBehaviour
 {
-    [SerializeField] InputActionReference attitudeAction; // Vector3
+    [SerializeField] InputActionReference attitudeAction;
     [SerializeField] float sensitivity = 1f;
+ 		Quaternion intialRotation;
+    Quaternion lastRotation;
 
-    void OnEnable()
+	void Start()
+	{
+		intialRotation = transform.rotation;
+	}
+
+	// device management
+	void OnEnable()
     {
-        Debug.Log($"SystemInfo.supportsGyroscope = {SystemInfo.supportsGyroscope}\nGyroscope.current = {Gyroscope.current}");
-        Debug.Log($"AttitudeSensor.current = {AttitudeSensor.current}");
-        Debug.Log($"GravitySensor.current = {GravitySensor.current}");
-        Debug.Log($"Accelerometer.current = {Accelerometer.current}");
         InputSystem.onDeviceChange += OnDeviceChange;
         foreach (var d in InputSystem.devices) TryEnable(d);
         attitudeAction.action.Enable();
@@ -31,20 +34,23 @@ public class GyroInputTest : MonoBehaviour
 
     static void TryEnable(InputDevice d)
     {
-        if (d is Gyroscope || d is AttitudeSensor || d is GravitySensor || d is Accelerometer)
+        //if (d is Gyroscope || d is AttitudeSensor || d is GravitySensor || d is Accelerometer)
+				if (d is AttitudeSensor)
         {
             Debug.Log($"enabling device: {d}");
             InputSystem.EnableDevice(d);
         }
     }
 
-    Quaternion lastw;
+		// script content
+		static Quaternion AndroidToUnity(Quaternion q) => Quaternion.Normalize(new Quaternion(-q.x, -q.z, -q.y, q.w));
+		
     void Update()
     {
-        Quaternion w = attitudeAction.action.ReadValue<Quaternion>(); // zero until the device exists
-        if (w == lastw) return;
-        Debug.Log($"change angle: {w}");
-        lastw = w;
-        transform.rotation = w;
+        Quaternion w = attitudeAction.action.ReadValue<Quaternion>();
+        if (w == lastRotation) return;
+				w = AndroidToUnity(intialRotation * w);
+        lastRotation = w;
+        transform.rotation = w * intialRotation;
     }
 }
