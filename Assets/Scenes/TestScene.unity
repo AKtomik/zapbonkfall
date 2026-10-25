@@ -509,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad9b5f3043d1031498e4aa94a5456502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  gyroAction: {fileID: -1218848895786315609, guid: 9235763f52c89c9449331d610e640c72, type: 3}
+  attitudeAction: {fileID: -1771282363913012692, guid: 9235763f52c89c9449331d610e640c72, type: 3}
   sensitivity: 1
 --- !u!1 &832575517
 GameObject:

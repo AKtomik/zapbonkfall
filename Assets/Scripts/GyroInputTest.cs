@@ -4,22 +4,24 @@ using Gyroscope = UnityEngine.InputSystem.Gyroscope;
 
 public class GyroInputTest : MonoBehaviour
 {
-    [SerializeField] InputActionReference gyroAction; // Vector3
+    [SerializeField] InputActionReference attitudeAction; // Vector3
     [SerializeField] float sensitivity = 1f;
 
     void OnEnable()
     {
-        Debug.Log($"SystemInfo.supportsGyroscope = {SystemInfo.supportsGyroscope}");
-        Debug.Log($"Gyroscope.current = {Gyroscope.current}");
+        Debug.Log($"SystemInfo.supportsGyroscope = {SystemInfo.supportsGyroscope}\nGyroscope.current = {Gyroscope.current}");
+        Debug.Log($"AttitudeSensor.current = {AttitudeSensor.current}");
+        Debug.Log($"GravitySensor.current = {GravitySensor.current}");
+        Debug.Log($"Accelerometer.current = {Accelerometer.current}");
         InputSystem.onDeviceChange += OnDeviceChange;
         foreach (var d in InputSystem.devices) TryEnable(d);
-        gyroAction.action.Enable();
+        attitudeAction.action.Enable();
     }
 
     void OnDisable()
     {
         InputSystem.onDeviceChange -= OnDeviceChange;
-        gyroAction.action.Disable();
+        attitudeAction.action.Disable();
     }
 
     void OnDeviceChange(InputDevice d, InputDeviceChange change)
@@ -29,17 +31,20 @@ public class GyroInputTest : MonoBehaviour
 
     static void TryEnable(InputDevice d)
     {
-        if (d is Gyroscope || d is AttitudeSensor || d is GravitySensor)
+        if (d is Gyroscope || d is AttitudeSensor || d is GravitySensor || d is Accelerometer)
+        {
+            Debug.Log($"enabling device: {d}");
             InputSystem.EnableDevice(d);
+        }
     }
 
-    Vector3 lastw;
+    Quaternion lastw;
     void Update()
     {
-        Vector3 w = gyroAction.action.ReadValue<Vector3>(); // zero until the device exists
+        Quaternion w = attitudeAction.action.ReadValue<Quaternion>(); // zero until the device exists
         if (w == lastw) return;
+        Debug.Log($"change angle: {w}");
         lastw = w;
-        Debug.Log("w change to " + w);
-        transform.Rotate(-w * (Mathf.Rad2Deg * Time.deltaTime * sensitivity), Space.Self);
+        transform.rotation = w;
     }
 }

@@ -35,6 +35,26 @@
                     "interactions": "",
                     "initialStateCheck": true,
                     "priority": 0
+                },
+                {
+                    "name": "Gravito",
+                    "type": "Value",
+                    "id": "34a27af9-bf1a-40f0-a441-b8b88b7ecf6f",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                },
+                {
+                    "name": "Atito",
+                    "type": "Value",
+                    "id": "d4ed0ad9-b031-4f23-9ff7-223f8eb17f04",
+                    "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -68,6 +88,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Gyro",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d925aacf-62d6-42bb-8b25-cb9ece3778fb",
+                    "path": "<GravitySensor>/gravity",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Gravito",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f9dda24-503e-4ca2-a176-71c67db5e5f8",
+                    "path": "<AttitudeSensor>/attitude",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Atito",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
