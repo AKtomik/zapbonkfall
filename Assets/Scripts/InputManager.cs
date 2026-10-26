@@ -59,15 +59,15 @@ public static class InputManager
 	}
 	
 	// vector magnitude <= 1 (can be less)
-	public static Vector3 ReadMovement2D()
+	public static Vector2 ReadMovement2D()
 	{
-		Vector3 dir = Vector3.zero;
+		Vector2 dir = Vector3.zero;
 		
 		// acceleration from gyro
-		dir += new Vector3(-Input.acceleration.y, 0, Input.acceleration.x);
+		dir += new Vector2(-Input.acceleration.y, Input.acceleration.x);
 
 		// debug using keyboard
-		dir += new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+		dir += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
 		// clamp acceleration vector to unit sphere
 		if (dir.sqrMagnitude > 1) dir.Normalize();
