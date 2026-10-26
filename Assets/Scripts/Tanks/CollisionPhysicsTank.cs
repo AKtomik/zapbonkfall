@@ -7,14 +7,8 @@ public class CollisionPhysicsTank : MonoBehaviour
     private float weight;
     private void Start()
     {
-        //A DECOMMENTER UNE FOIS LE CONTROLLER TERMINE
-        //collisionForce = gameObject.GetComponent<NomDuScriptStat>().collisionForce; 
-        //weight = gameObject.GetComponent<NomDuScriptStat>().weight;
-
-
-        //A SUPPRIMER UNE FOIS CONTROLLER TERMINE
-        collisionForce = 1;
-        weight = 1;
+        collisionForce = gameObject.GetComponent<StatsTank>().collisionForce; 
+        weight = gameObject.GetComponent<StatsTank>().weight;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnCollisonEnter2D(Collider other)
@@ -22,9 +16,7 @@ public class CollisionPhysicsTank : MonoBehaviour
         Vector2 impactDirection = (other.transform.position - transform.position).normalized;
         if (other.tag == "Tank")
         {
-            //A COMPLETER ET DECOMMENTER
-            //float otherTankWeight = other.GetComponent<Script des stats>().weight;
-            /*temp*/ float otherTankWeight = 1;
+            float otherTankWeight = other.GetComponent<StatsTank>().weight;
 
 
             //repousse le tank
