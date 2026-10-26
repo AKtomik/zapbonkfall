@@ -64,7 +64,7 @@ public static class InputManager
 		Vector2 dir = Vector3.zero;
 		
 		// acceleration from gyro
-		dir += new Vector2(-Input.acceleration.y, Input.acceleration.x);
+		dir += new Vector2(Input.acceleration.x, Input.acceleration.y);
 
 		// debug using keyboard
 		dir += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
