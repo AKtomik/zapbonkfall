@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class GyroInputTest : MonoBehaviour
 {
-	void Start()
+	void OnEnable()
 	{
-		Input.gyro.enabled = true;
+		InputManager.EnableGyro();
 	}
 
-	static Quaternion AndroidToUnity(Quaternion q) => Quaternion.Normalize(new Quaternion(-q.x, -q.z, -q.y, q.w));
+	void OnDisable()
+	{
+		InputManager.DisableGyro();	
+	}
 
 	void Update()
 	{
-		Quaternion rotation = AndroidToUnity(Input.gyro.attitude);
-		transform.rotation = rotation;
+		transform.rotation = InputManager.ReadGyroAttitudeRotation();
 	}
 }
