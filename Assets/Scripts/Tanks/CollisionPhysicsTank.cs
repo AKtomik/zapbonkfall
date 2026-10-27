@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class CollisionPhysicsTank : MonoBehaviour
 {
-    private float weight;
     private float collisionForce; //offensive power bump
     private float weight; //defensive power bump
 
