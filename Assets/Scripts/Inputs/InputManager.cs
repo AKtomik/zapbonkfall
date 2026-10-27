@@ -57,4 +57,20 @@ public static class InputManager
 	{
 		return Input.acceleration.magnitude;
 	}
+	
+	// vector magnitude <= 1 (can be less)
+	public static Vector2 ReadMovement2D()
+	{
+		Vector2 dir = Vector3.zero;
+		
+		// acceleration from gyro
+		dir += new Vector2(Input.acceleration.x, Input.acceleration.y);
+
+		// debug using keyboard
+		dir += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+		// clamp acceleration vector to unit sphere
+		if (dir.sqrMagnitude > 1) dir.Normalize();
+		return dir;
+	}
 }
