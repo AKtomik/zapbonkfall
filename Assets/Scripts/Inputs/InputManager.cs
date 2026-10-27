@@ -34,11 +34,18 @@ public static class InputManager
 	}
 
 	// GYROSCOPE
+	private static float accelerationAngleForMax = 0f;
 
 	// enable gyro
-	public static void EnableGyro()
+	public static void EnableGyro(float angleForMax = 90f)
 	{
+		EditGyro(angleForMax);
 		Input.gyro.enabled = true;
+	}
+
+	public static void EditGyro(float angleForMax)
+	{
+		accelerationAngleForMax = angleForMax;
 	}
 
 	public static void DisableGyro()
@@ -64,7 +71,7 @@ public static class InputManager
 		Vector2 dir = Vector3.zero;
 		
 		// acceleration from gyro
-		dir += new Vector2(Input.acceleration.x, Input.acceleration.y);
+		dir += new Vector2(Input.acceleration.x, Input.acceleration.y) * 90f / accelerationAngleForMax;
 
 		// debug using keyboard
 		dir += new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
