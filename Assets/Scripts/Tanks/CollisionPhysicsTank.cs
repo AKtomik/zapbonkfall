@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class CollisionPhysicsTank : MonoBehaviour
 {
-    private float collisionForce;
     private float weight;
+    private float collisionForce; //offensive power bump
+    private float weight; //defensive power bump
 
     //temp
-    public float bumpForce;
+    public float bumpForce; //wall bounce force
     private void Start()
     {
         collisionForce = gameObject.GetComponent<StatsTank>().collisionForce; 
@@ -23,7 +24,7 @@ public class CollisionPhysicsTank : MonoBehaviour
             float otherTankWeight = other.GetComponent<StatsTank>().weight;
 
 
-            //repousse le tank
+            //push the other tank
             other.GetComponent<Rigidbody2D>().AddForce(impactDirection * (1 + collisionForce - otherTankWeight), ForceMode2D.Impulse);
         }
         else if (other.tag == "Wall")
