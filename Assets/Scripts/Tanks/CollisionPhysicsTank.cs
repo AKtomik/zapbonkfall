@@ -10,8 +10,8 @@ public class CollisionPhysicsTank : MonoBehaviour
     public float bumpForce; //wall bounce force
     private void Start()
     {
-        collisionForce = gameObject.GetComponent<StatsTank>().collisionForce; 
-        weight = gameObject.GetComponent<StatsTank>().weight;
+        collisionForce = gameObject.GetComponent<Tank>().collisionForce; 
+        weight = gameObject.GetComponent<Tank>().weight;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void OnCollisionEnter2D(Collision2D otherCollision)
@@ -20,7 +20,7 @@ public class CollisionPhysicsTank : MonoBehaviour
         Vector2 impactDirection = (other.transform.position - transform.position).normalized;
         if (other.tag == "Tank")
         {
-            float otherTankWeight = other.GetComponent<StatsTank>().weight;
+            float otherTankWeight = other.GetComponent<Tank>().weight;
 
 
             //push the other tank
@@ -30,5 +30,15 @@ public class CollisionPhysicsTank : MonoBehaviour
         {
             GetComponent<Rigidbody2D>().AddForce(impactDirection * (1 / weight  *bumpForce ), ForceMode2D.Impulse);
         }
+    }
+
+
+    private void OnTriggerExit2D(Collider2D collision) //to detect when a tank fall
+    {
+        GameObject other = collision.gameObject;
+
+        if (other.tag != "Ground") return;
+
+        GameManager.instance.PlayerDied(gameObject);
     }
 }
