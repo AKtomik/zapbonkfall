@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public List<Tank> tanks;
+    public List<Tank> tanks; //a renseigner
     private List<Tank> aliveTanks;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

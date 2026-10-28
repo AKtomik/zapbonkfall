@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class Tank : MonoBehaviour
 {
+    ///// class player?
     public string player; //is string adapted?
     public int roundWon;
+    /////
+
+
     public float weight;
     public float collisionForce;
     public float speed;
