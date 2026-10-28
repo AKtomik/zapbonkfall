@@ -374,6 +374,8 @@ GameObject:
   - component: {fileID: 1602534977}
   - component: {fileID: 1602534976}
   - component: {fileID: 1602534975}
+  - component: {fileID: 1602534979}
+  - component: {fileID: 1602534978}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -469,6 +471,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1602534978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602534974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8bccd92b783c8544bf6d9aa754e8f25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NetworkCommandLine
+--- !u!114 &1602534979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602534974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f06b2a047c1afe14e9f7d254ca5d3382, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NetworkSimple.HelloWorldManager
 --- !u!1001 &148178985955046464
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -674,10 +700,6 @@ PrefabInstance:
     - target: {fileID: 2796932935535288470, guid: badfaf114f0515e4093da26bdef693ff, type: 3}
       propertyPath: m_Name
       value: OrthoCam
-      objectReference: {fileID: 0}
-    - target: {fileID: 2796932935535288470, guid: badfaf114f0515e4093da26bdef693ff, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5741013717738453731, guid: badfaf114f0515e4093da26bdef693ff, type: 3}
       propertyPath: cameraWidthUnits
