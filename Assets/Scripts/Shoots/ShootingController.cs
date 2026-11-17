@@ -1,9 +1,18 @@
 using UnityEngine;
+public enum InputMode { 
+    TouchOnly, /* */
+    OneJoystick, 
+    TwoJoysticks,
+    InstantiateJoystick
+}
 public enum ClickType { Tap, Hold, Lift, None }
 public enum ShooterMode { SubMachineGun, ChargeGun, None }
 
 public class ShootingController : MonoBehaviour
 {
+    [Header("[INPUTS SETTINGS]")]
+    [SerializeField] private InputMode _inputMode; 
+
     [Header("[SHOOTER SETTINGS]")]
     [SerializeField] ShooterMode _shooterMode = ShooterMode.SubMachineGun;
     [SerializeField] private Transform _firePoint;
