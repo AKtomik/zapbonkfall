@@ -1,55 +1,87 @@
 using UnityEngine;
-using UnityEngine.UI; 
 
 public class JoystickController : MonoBehaviour
 {
     [Header("[REFERENCES]")]
+    [SerializeField] private RectTransform _joystickBGrt;   
+    [SerializeField] private RectTransform _joystickBtnRt;  
+    [SerializeField] private Canvas _canvas;
+    [SerializeField] private Transform _tank;
 
-    // References to move on Joystick Prefab later, only to test with one at beginning
-    [SerializeField] private Image _joystickBG;
-    [SerializeField] private Image _joystickBtn;
+    [Header("[SETTINGS]")]
+    [SerializeField] private float _radius = 100f;       
+    [SerializeField] private float _rotationSpeed = 6f;  
+    [SerializeField] private float _deadZone = 0.1f;     
 
+    private int _currentFingerId = -1;
+    private Vector2 _aimDirection;
+    private Camera _uiCamera;
 
-    //private ClickType DetectClickType()
-    //{
-    //    //foreach (Touch touch in InputManager.GetClickTaps()) { /*CanonRotation(touch.position);*/ }
-
-    //    if (InputManager.GetClickTaps().Length > 0) return ClickType.Tap;
-    //    if (InputManager.GetClickHolds().Length > 0) return ClickType.Hold;
-    //    if (InputManager.GetClickLifts().Length > 0) return ClickType.Lift;
-
-
-    //    return ClickType.None;
-    //}
+    private void Awake()
+    {
+        _uiCamera = (_canvas.renderMode == RenderMode.ScreenSpaceOverlay) ? null : _canvas.worldCamera;
+        _aimDirection = _tank.up; // évite un saut de rotation au démarrage
+    }
 
     private void Update()
     {
-        if (InputManager.GetClickHolds().Length > 0)
-        {
-            Touch touch = InputManager.GetClickHolds()[0];
-            MoveJoystickBtn(touch);
+        if (_currentFingerId == -1)
+        {            
+            foreach (Touch touch in InputManager.GetClickTaps())
+            {
+                if (IsPointerInJoystickZone(touch.position))
+                {
+                    _currentFingerId = touch.fingerId;
+                    MoveJoystick(touch.position);
+                    break;
+                }
+            }
         }
+        else
+        {         
+            foreach (Touch touch in InputManager.GetClickHolds())
+            {
+                if (touch.fingerId == _currentFingerId)
+                    MoveJoystick(touch.position);
+            }
+
+            foreach (Touch touch in InputManager.GetClickLifts())
+            {
+                if (touch.fingerId == _currentFingerId)
+                    Cancel();
+            }
+        }
+
+        _tank.up = Vector3.RotateTowards(_tank.up, _aimDirection, _rotationSpeed * Time.deltaTime, 0f);
     }
 
-    private void MoveJoystickBtn(Touch touch)
+    private bool IsPointerInJoystickZone(Vector2 screenPosition)
     {
-        Vector2 direction = Camera.main.ScreenToWorldPoint(touch.position) - transform.position;
-        direction = direction.normalized;
-
-        _joystickBtn.rectTransform.anchoredPosition = new Vector2(
-            direction.x * (_joystickBG.rectTransform.sizeDelta.x /2),
-            direction.y * (_joystickBG.rectTransform.sizeDelta.y /2)) ;
-
-        //_joystickBtn.rectTransform.anchoredPosition = new Vector2(
-        //    touch.position.x * (_joystickBG.rectTransform.sizeDelta.x /2), 
-        //    touch.position.y * (_joystickBG.rectTransform.sizeDelta.y /2)
-        //);
+        return RectTransformUtility.RectangleContainsScreenPoint(_joystickBGrt, screenPosition, _uiCamera);
     }
 
-    private void ResetJoystickPosition()
+    private void MoveJoystick(Vector2 screenPoint)
     {
-        Debug.Log($"Release touch screen"); 
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_joystickBGrt, screenPoint, _uiCamera, out Vector2 localPoint);
 
-        _joystickBtn.rectTransform.anchoredPosition = Vector2.zero;
+        Vector2 value = Vector2.ClampMagnitude(localPoint / _radius, 1f); 
+        _joystickBtnRt.anchoredPosition = value * _radius;                
+
+        if (value.sqrMagnitude > _deadZone * _deadZone)
+            _aimDirection = value;
+    }
+
+    private void Cancel()
+    {
+        _joystickBtnRt.anchoredPosition = Vector2.zero;
+        _currentFingerId = -1;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (_joystickBGrt == null || _canvas == null) return;
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(_joystickBGrt.position, _radius * _canvas.scaleFactor);
     }
 }

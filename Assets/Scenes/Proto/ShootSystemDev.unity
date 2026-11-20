@@ -239,13 +239,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 322556077}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4876b778289cc884c809d19c91f68799, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JoystickController
-  _joystickBG: {fileID: 333869135}
-  _joystickBtn: {fileID: 1321334127}
+  _joystickBGrt: {fileID: 333869134}
+  _joystickBtnRt: {fileID: 1321334126}
+  _canvas: {fileID: 1971110072}
+  _tank: {fileID: 1731194408}
+  _radius: 172
+  _rotationSpeed: 10
+  _deadZone: 0.1
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1593,7 +1598,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731194400}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94d22c86684cc8b4dbba3a68c0425836, type: 3}
   m_Name: 
