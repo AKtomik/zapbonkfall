@@ -1,119 +1,88 @@
 using UnityEngine;
-public enum InputMode { 
-    TouchOnly, /* */
-    OneJoystick, 
-    TwoJoysticks,
-    InstantiateJoystick
-}
 public enum ClickType { Tap, Hold, Lift, None }
-public enum ShooterMode { SubMachineGun, ChargeGun, None }
 
 public class ShootingController : MonoBehaviour
 {
-    [Header("[INPUTS SETTINGS]")]
-    [SerializeField] private InputMode _inputMode; 
-
-    [Header("[SHOOTER SETTINGS]")]
-    [SerializeField] ShooterMode _shooterMode = ShooterMode.SubMachineGun;
+    [Header("[REFERENCES]")]
+    [SerializeField] private ControllerSettings _settings;
     [SerializeField] private Transform _firePoint;
-    [SerializeField] private float _rotationSpeed = 6f;
-
-    [Header("-> SubMachine Gun")]
-    [SerializeField] private float _fireRate = 0.2f;
-
-    [Header("-> Charge Gun")]
-    [SerializeField] private float _maxChargeDuration = 1f;
 
     [Header("[BULLETS TYPES]")]
     [SerializeField] private GameObject _simpleBullet;
 
-    private Camera _camera;
-    private Bullet _currentBullet;
+    [Header("[TANK SETTINGS]")]
+    [SerializeField] private float _rotationSpeed = 6f;
+    [Tooltip("General fire rate for all tap touch")]
+    [SerializeField] private float _tapFireRate = 0.3f;
 
+    [Header("-> SubMachine Gun")]
+    [SerializeField] private float _subMachineGunfireRate = 0.2f;
+
+    [Header("-> Charge Gun")]
+    [SerializeField] private float _maxChargeDuration = 1f;
+
+    private ShooterMode _shooterMode;
+    private Bullet _currentBullet;
     private float _chargeDuration;
     private float _nextShotTimer;
-    private Vector2 _direction;
+    private Vector2 _targetDirection;
 
-    void Awake() 
-    { 
-        _camera = Camera.main; 
+    void Awake()
+    {
+        _shooterMode = _settings.ShooterMode;
+        _targetDirection = transform.up; /* Initialize position */
     }
 
     private void Update()
     {
-        ShootType(DetectClickType());
-        transform.up = Vector3.RotateTowards(transform.up, _direction, _rotationSpeed * Time.deltaTime, 0f);
+        //Apply Rotation
+        transform.up = Vector3.RotateTowards(transform.up, _targetDirection, _rotationSpeed * Time.deltaTime, 0f);
     }
 
-    private ClickType DetectClickType()
+    // --- Public calls (called by Controllers) --- //
+    public void SetDirection(Vector2 direction) /* To rotate tank */
     {
-        foreach (Touch touch in InputManager.GetClickTaps()) { CanonRotation(touch.position); }
-
-        if (InputManager.GetClickTaps().Length > 0) return ClickType.Tap;
-        if (InputManager.GetClickHolds().Length > 0) return ClickType.Hold;
-        if (InputManager.GetClickLifts().Length > 0) return ClickType.Lift;
-
-
-        return ClickType.None;
+        if (direction.sqrMagnitude > 0.0001f) _targetDirection = direction;
     }
-
-    private void ShootType(ClickType clickType)
+    public void ClickHandler(ClickType click)
     {
-        switch (clickType)
+        switch (click)
         {
-            case ClickType.None:
-                break;
-            case ClickType.Tap:
-                TapShoot();
-                break;
-            case ClickType.Hold:
-                HoldShoot();
-                break;
-            case ClickType.Lift:
-                LiftShoot();
-                break;
+            case ClickType.None: break;
+            case ClickType.Tap: TapShoot(); break;
+            case ClickType.Hold: HoldShoot(); break;
+            case ClickType.Lift: LiftShoot(); break;
         }
     }
 
-    private void CanonRotation(Vector2 screenPos)
-    {
-        _direction = _camera.ScreenToWorldPoint(screenPos) - transform.position;
-    }
-
+    // --- Shoots types --- //
     private void TapShoot()
     {
-        if (Time.time >= _nextShotTimer + _fireRate)
-        {
-            if (_shooterMode == ShooterMode.SubMachineGun)
-            {
-                SpawnBullet().Launch();
-                _nextShotTimer = Time.time + _fireRate;
-            }
-            else if (_shooterMode == ShooterMode.ChargeGun)
-            {
-                _currentBullet = SpawnBullet();
-                _currentBullet.transform.SetParent(_firePoint, true);
-                _nextShotTimer = Time.time + _fireRate;
-            }
-        }
-
         _chargeDuration = 0f;
+
+        if (_shooterMode == ShooterMode.SubMachineGun)
+        {
+            Shoot(_tapFireRate);
+        }
+        else if (_shooterMode == ShooterMode.ChargeGun)
+        {
+            if (Time.time < _nextShotTimer) return;
+
+            _currentBullet = SpawnBullet();
+            _currentBullet.transform.SetParent(_firePoint, true);
+            _nextShotTimer = Time.time + _tapFireRate;
+        }
     }
 
     private void HoldShoot()
     {
-        _chargeDuration += Time.deltaTime;
-
         if (_shooterMode == ShooterMode.SubMachineGun)
         {
-            if (Time.time >= _nextShotTimer)
-            {
-                SpawnBullet().Launch();
-                _nextShotTimer = Time.time + _fireRate;
-            }
+            Shoot(_subMachineGunfireRate);
         }
         else if (_shooterMode == ShooterMode.ChargeGun && _currentBullet != null)
         {
+            _chargeDuration += Time.deltaTime;
             _currentBullet.Charge(Mathf.Clamp01(_chargeDuration / _maxChargeDuration));
         }
     }
@@ -128,6 +97,15 @@ public class ShootingController : MonoBehaviour
         _chargeDuration = 0f;
     }
 
+    // --- General methods --- //
+
+    private void Shoot(float fireRate) // Fire rate guard
+    {
+        if (Time.time < _nextShotTimer) return;
+
+        SpawnBullet().Launch();
+        _nextShotTimer = Time.time + fireRate;
+    }
     private Bullet SpawnBullet()
     {
         GameObject go = Instantiate(_simpleBullet, _firePoint.position, _firePoint.rotation);
